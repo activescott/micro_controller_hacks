@@ -5,14 +5,14 @@ SPEED_MIN = 0
 
 class Motor:
   """
-  Provides methods to control a single motor in the TB6612FNG dual motor controller.
+  Provides methods to control a single motor in the TB6612FNG dual motor driver.
   """
   def __init__(self, in1_pin, in2_pin, pwm_pin):
     """
     Initializes a motor.
 
-    - `pinIn1`: Pin ID (usually an int) identifying hte pin for one of the two inputs that determines the direction of the motor. This will be AI1 or AI2 for motor A and BI1 or BI2 for motor B.
-    - `pinIn2`: Pin ID (usually an int) identifying hte pin for one of the two inputs that determines the direction of the motor. This will be AI1 or AI2 for motor A and BI1 or BI2 for motor B.
+    - `pinIn1`: Pin ID identifying the pin for one of the two inputs that determines the direction of the motor. This will be AI1 or AI2 for motor A and BI1 or BI2 for motor B.
+    - `pinIn2`: Pin ID identifying the pin for one of the two inputs that determines the direction of the motor. This will be AI1 or AI2 for motor A and BI1 or BI2 for motor B.
     - `pinPWM`: PWM input that controls the speed.
     """
     self.pinIn1 = machine.Pin(in1_pin, machine.Pin.OUT, machine.Pin.PULL_DOWN)
