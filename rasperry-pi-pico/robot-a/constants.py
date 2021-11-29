@@ -1,0 +1,9 @@
+# PINS
+DISTANCE_SENSOR_TRIGGER_PIN = 2
+DISTANCE_SENSOR_ECHO_PIN = 3
+
+
+# Misc
+MS_PER_SECOND = 1000
+# Minimum allowed distance from an obstacle
+MIN_OBSTACLE_DISTANCE = 20.0

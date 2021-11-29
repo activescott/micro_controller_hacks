@@ -1,5 +1,5 @@
-# Getting Started with MicroPython on Raspberry Pi Pico, Chapter 4...
-# Hello, LED!
+# Hello, LED! This blinks an LED built into the pico. No external hardware needed.
+# Probably the simplest possible example of pico.
 import machine
 import utime
 import random
