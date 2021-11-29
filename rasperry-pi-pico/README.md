@@ -58,3 +58,9 @@ Start an interactive session with micropython unix like `docker run -it "micropy
 - https://github.com/HeMan/micropython-ws2801
 - https://github.com/tuupola/micropython-mpu6886 (shows up in pipy well, good examples, but shows WIP)
 - https://github.com/fizista/micropython-umqtt.simple2 sophisticated setup.py to minimize package
+
+## How to unbrick your MicroPython Raspberry Pi Pico
+
+Download the firmware at https://forums.raspberrypi.com/viewtopic.php?f=146&t=305432 and copy it on there. It is a MicroPython derivative that will rename main.py to main-1.py or something and then you can boot it normally. Then open Thonny, go to Options and on the "Interpreter" Options tab, you can select **Install or update firmware**.
+Found at https://forum.micropython.org/viewtopic.php?f=21&t=10095
+There is also a nuke program from Raspberry Pi at https://github.com/raspberrypi/pico-examples/blob/master/flash/nuke/nuke.c
