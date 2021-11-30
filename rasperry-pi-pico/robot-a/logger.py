@@ -15,7 +15,7 @@ class Logger:
 
     def open(self):
         if self.file is None:
-            self.file = open("{}.log".format(self.name), "w")
+            self.file = open("{}.log".format(self.name), "at")
 
     def close(self):
         if self.file:

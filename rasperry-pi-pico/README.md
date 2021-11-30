@@ -34,6 +34,14 @@ Get `<device-port>` from the first column of the list from the `mpremote connect
 
 Once you connect you're put into a REPL python environment on the device. You can enter something like `os.uname()` to see some output about the device python is running in.
 
+#### Repl Notes:
+
+Useful commands:
+
+    help("modules")
+
+    uos.uname()
+
 ## Misc References:
 
 - Tensorflow Light: https://www.raspberrypi.com/documentation/accessories/camera.html#post-processing-with-tensorflow-lite

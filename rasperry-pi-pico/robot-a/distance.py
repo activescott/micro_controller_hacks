@@ -12,7 +12,7 @@ class DistanceSensor:
         # I don't know why but regularly this sensor returns readings aproximately at ~0.79 that are nonsensical. Averaging definitely gets rid of most of them
         samples = const(10)
         total = 0.0
-        readings = [self._sensor.distance_cm() for r in range(samples)]        
+        readings = [self._sensor.distance_cm() for r in range(samples)]
         #if min(readings) < 1:
         #    print("\nhcsr04: at least one reading less than 1:{}\n".format(readings))
         return sum(readings) / len(readings)
