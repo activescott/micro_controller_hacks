@@ -24,9 +24,9 @@ def setup():
 
 
 def stop():
-    # if we just do a normal stop, he doesn't stop fast enough and keeps rolling forward too long. So we do a quick reverse to rapidly stop him:
-    motors.reverse()
-    utime.sleep_ms(round(MS_PER_SECOND * 0.01))
+    motors.stop_hard()
+    # lets not leave the motors in the hard stopped state for long:
+    utime.sleep_ms(MS_PER_SECOND * 1)
     motors.stop()
 
 

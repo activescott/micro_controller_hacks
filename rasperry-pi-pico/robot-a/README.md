@@ -10,7 +10,12 @@ This is a relatively simple robot to build on. The general goal is to have an au
 ## Todo:
 - [+] Move forward and stop before hitting an obstacle
 - [ ] after stopping... avoid an obstacle by turning and finding a direction to go in that doesn't have an obstacle
-- [ ] instead of choosing the first direction to go in, spin 360 deg and find the direction to go with the greatest distance we can go in a straight line
+- [ ] refactor state machine to a series of pub/sub messages consumed and published by **Agents**:
+  - **Agents** can publish or consume messages and proffer which ones they are listening for and publishing. Potential agents: FrontDistance, Drive, Compass, Display/LCD, FrontBumper, Speech, Visual, etc.
+  - A **broker** handles registration of agents and pub/sub of messages to/from agents
+  - **Messages** have a name and a set of well-defined parameters.
+  - **Context**: At any given time there is a "system context" of the system overall that is an aggregation of state provided by agents. Each agent provides a `context` and `name` that the broker uses to assemble a system state (`systemState.<agent name>` => `agent.state`). This way agents only modify their own state, but can read state from any agent and have no coupling to any agent beyond the agent's name to access state. 
+- [ ] when avoiding obstacle instead of choosing the first "free" direction to go in, spin 360 deg and find the direction to go with the greatest distance we can go in a straight line
 - [ ] Slow down as an obstacle gets closer
 - [ ] make the logger periodically check the size or line count in the log file and delete older lines.
 - [ ] LCD sensor that shows the current activity/state of the robot

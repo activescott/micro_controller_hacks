@@ -31,7 +31,10 @@ try:
 
     print("reverse")
     motors.reverse()
+    utime.sleep(2)
 
+    print("stop_hard")
+    motors.stop_hard()
     utime.sleep(2)
 
     print("spin left")
