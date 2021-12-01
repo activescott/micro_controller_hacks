@@ -5,5 +5,6 @@ DISTANCE_SENSOR_ECHO_PIN = 3
 
 # Misc
 MS_PER_SECOND = 1000
+US_PER_SECOND = 10**6
 # Minimum allowed distance from an obstacle
 MIN_OBSTACLE_DISTANCE = 20.0

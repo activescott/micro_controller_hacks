@@ -10,6 +10,7 @@ This is a relatively simple robot to build on. The general goal is to have an au
 ## Todo:
 - [+] Move forward and stop before hitting an obstacle
 - [ ] after stopping... avoid an obstacle by turning and finding a direction to go in that doesn't have an obstacle
+- [ ] Come up with way to turn a specified number of degrees according to compass (this will be a good test of agent design it requires concurrency)
 - [ ] refactor state machine to a series of pub/sub messages consumed and published by **Agents**:
   - **Agents** can publish or consume messages and proffer which ones they are listening for and publishing. Potential agents: FrontDistance, Drive, Compass, Display/LCD, FrontBumper, Speech, Visual, etc.
   - A **broker** handles registration of agents and pub/sub of messages to/from agents

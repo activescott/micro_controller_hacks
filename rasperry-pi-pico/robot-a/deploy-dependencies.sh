@@ -15,7 +15,7 @@ help () {
   cat << END_DOC
 USAGE: $THISSCRIPT
 
-Installs this app and all the necessary libs onto the device
+Installs this app's libs onto the device
 
 END_DOC
 
@@ -33,15 +33,3 @@ do
   #echo "copying $(basename $f) to /lib/"
   mpremote connect $MP_DEVICE fs cp "$f" ":/lib/$(basename $f)"
 done
-
-echo "\nCopying app code to device:"
-for f in $THISDIR/*.py
-do
-  # remote copy only copies full path name of host mpremote connect $MP_DEVICE fs cp "$PKG_DIR" ":"
-  #echo "copying $(basename $f) to /:"
-  mpremote connect $MP_DEVICE fs cp "$f" ":/$(basename $f)"
-done
-
-echo ""
-echo "listing files on device:"
-mpremote connect $MP_DEVICE ls /

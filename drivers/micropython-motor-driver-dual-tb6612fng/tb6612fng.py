@@ -48,7 +48,7 @@ class Motor:
         """
         self.pinIn1.high()
         self.pinIn2.low()
-        self.pinPWM.duty_u16(speed)
+        self.pinPWM.duty_u16(round(speed))
 
     def counter_clockwise(self, speed):
         """
@@ -57,7 +57,7 @@ class Motor:
         """
         self.pinIn1.low()
         self.pinIn2.high()
-        self.pinPWM.duty_u16(speed)
+        self.pinPWM.duty_u16(round(speed))
 
     def short_break(self):
         """
@@ -106,11 +106,11 @@ class Motors:
         self.right.counter_clockwise(speed)
 
     def spin_left(self, speed=SPEED_MAX):
-        self.left.stop()
+        self.left.clockwise(speed)
         self.right.clockwise(speed)
 
     def spin_right(self, speed=SPEED_MAX):
-        self.right.stop()
+        self.right.counter_clockwise(speed)
         self.left.counter_clockwise(speed)
 
     def stop(self):
