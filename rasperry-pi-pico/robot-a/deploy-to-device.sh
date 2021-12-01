@@ -21,6 +21,8 @@ END_DOC
 
 }
 
+"$THISDIR/update-dependencies.sh"
+
 echo "\nCreating /lib dir on device (this may error if it already exists)..."
 mpremote connect $MP_DEVICE fs mkdir /lib
 
