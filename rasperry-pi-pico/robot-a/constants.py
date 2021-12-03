@@ -1,10 +1,25 @@
-# PINS
+# Ultrasonic Distance Sensor Pins
 DISTANCE_SENSOR_TRIGGER_PIN = 2
 DISTANCE_SENSOR_ECHO_PIN = 3
+# Motor Driver Pins:
+MOTOR_STBY_PIN = 10
+MOTOR_A_PIN1 = 14
+MOTOR_A_PIN2 = 15
+MOTOR_A_PWM = 13
 
+MOTOR_B_PIN1 = 16
+MOTOR_B_PIN2 = 17
+MOTOR_B_PWM = 18
+
+# LCD Pins:
+LCD_PIN_SDA = 4
+LCD_PIN_SCL = 5
+LCD_I2C_BUS = 0
+LCD_I2C_PERIPH_ID = 114
 
 # Misc
 MS_PER_SECOND = 1000
 US_PER_SECOND = 10**6
+
 # Minimum allowed distance from an obstacle
 MIN_OBSTACLE_DISTANCE = 20.0
