@@ -5,12 +5,12 @@ sys.path.pop(0)
 from setuptools import setup
 
 setup(
-    name='micropython-motor-driver-dual-tb6612fng',
+    name='micropython-open-lcd-driver',
     py_modules=['tb6612fng'],
     version='1.0.0',
-    description='MicroPython library for Motor Driver TB6612FNG boards.',
-    long_description='Lets you control either or both DC motors via SparkFun Motor Driver Dual TB6612FNG boards.',
-    keywords='tb6612fng motor micropython',
+    description='MicroPython driver for OpenLCD displays.',
+    long_description='A MicroPython driver for SparkFun OpenLCD-firmware LCD displays such as the SparkFun 16x2 SerLCD - RGB Backlight.',
+    keywords='OpenLCD SerLCD SparkFun LCD micropython',
     url='https://github.com/activescott/micro_controller_hacks',
     author='Scott Willeke',
     author_email='scott@willeke.com',
