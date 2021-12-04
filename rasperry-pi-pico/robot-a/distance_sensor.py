@@ -3,7 +3,19 @@ import utime
 from constants import MS_PER_SECOND, MIN_OBSTACLE_DISTANCE, DISTANCE_SENSOR_TRIGGER_PIN, DISTANCE_SENSOR_ECHO_PIN
 
 
-_singleton = None
+_singleton: HCSR04 = None
+
+
+def init():
+    print("distance sensor starting...")
+    global _singleton
+    _singleton = HCSR04(trigger_pin=DISTANCE_SENSOR_TRIGGER_PIN,
+                        echo_pin=DISTANCE_SENSOR_ECHO_PIN)
+    print("distance sensor started.")
+
+
+def deinit():
+    pass
 
 
 def distance():
@@ -11,14 +23,6 @@ def distance():
     samples = const(10)
     total = 0.0
     readings = [_singleton.distance_cm() for r in range(samples)]
-    #if min(readings) < 1:
+    # if min(readings) < 1:
     #    print("\nhcsr04: at least one reading less than 1:{}\n".format(readings))
     return sum(readings) / len(readings)
-
-
-def setup():
-    print("distance sensor starting...")
-    global _singleton
-    _singleton = HCSR04(trigger_pin=DISTANCE_SENSOR_TRIGGER_PIN,
-                       echo_pin=DISTANCE_SENSOR_ECHO_PIN)
-    print("distance sensor started.")

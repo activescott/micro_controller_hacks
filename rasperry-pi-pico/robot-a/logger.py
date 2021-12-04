@@ -1,4 +1,4 @@
-import utime
+import utime, sys, io
 
 
 ERROR = 40
@@ -35,7 +35,13 @@ class Logger:
         self.file.write(prefix + msg + "\n")
         self.file.flush()
 
-    def error(self, msg):
+    def error(self, msg, exception=None):
+        if (exception is not None):
+            output = io.StringIO()
+            sys.print_exception(exception, output)
+            msg = msg + " " + output.getvalue()
+            output.close()
+
         self.log("ERROR: " + msg)
 
     def warn(self, msg):

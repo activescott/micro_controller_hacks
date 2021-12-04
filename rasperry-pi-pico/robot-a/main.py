@@ -1,7 +1,9 @@
 # Milestone 1: Make the robot go forward until the ultrasonic sensor detects something within 6 CM
 import utime
+import sys
 from constants import MS_PER_SECOND, US_PER_SECOND, MIN_OBSTACLE_DISTANCE
 import drive
+import display
 import distance_sensor
 from logger import Logger, DEBUG, INFO, WARNING, ERROR
 
@@ -71,23 +73,24 @@ state_machine_handlers = [
 def state_machine_loop():
     # current state machine state:
     log.info("state machine starting...")
+
     current_state = STATE_STARTING
+    display.update(current_state, distance=distance_sensor.distance())
     while True:
         for handler in state_machine_handlers:
             print(handler.__name__ + "...")
+            display.update(distance=distance_sensor.distance())
             new_state = handler(current_state)
             if new_state is not None and current_state != new_state:
                 # handler
-                print("transition...")
                 log.info("sm loop: transitioning from {} to {} from handler {}".format(
                     current_state, new_state, handler.__name__))
                 current_state = new_state
+                display.update(current_state, distance=distance_sensor.distance())
                 break
             else:
                 continue
-        #utime.sleep_us(int(US_PER_SECOND * 0.01))
-
-# general setup & start:
+        utime.sleep_us(int(US_PER_SECOND * 0.1))
 
 
 def start_logger():
@@ -97,13 +100,24 @@ def start_logger():
 
 
 def main():
-    # wait a bit before we attempt to init devices and start moving:
-    # LONG wait also allows to interrupt the bot if main.py acts up (like threads crashing sometimes bricks the pico)
-    utime.sleep_ms(int(MS_PER_SECOND * 3))
-    start_logger()
-    distance_sensor.setup()
-    drive.setup()
-    state_machine_loop()
+    try:
+        # wait a bit before we attempt to init devices and start moving:
+        # LONG wait also allows to interrupt the bot if main.py acts up (like threads crashing sometimes bricks the pico)
+        print("waiting before starting...")
+        utime.sleep_ms(int(MS_PER_SECOND * 3))
+        display.init()
+        start_logger()
+        distance_sensor.init()
+        drive.init()
+        state_machine_loop()
+    except Exception as err:
+        drive.disable()
+        log.error("error in message loop", err)
+    finally:
+        distance_sensor.deinit()
+        drive.deinit()
+        display.deinit()
+        sys.exit(1)
 
 
 main()

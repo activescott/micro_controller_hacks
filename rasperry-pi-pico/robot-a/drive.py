@@ -4,14 +4,22 @@ from constants import MS_PER_SECOND, MOTOR_STBY_PIN, MOTOR_A_PIN1, MOTOR_A_PIN2,
 
 motors = None
 
-def setup():
-    global motors
 
+def init():
+    global motors
     print("initializing left/right")
     left = Motor(MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM)
     right = Motor(MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM)
     print("initializing motors")
     motors = Motors(left, right, MOTOR_STBY_PIN)
+
+
+def disable():
+    motors.disable()
+
+
+def deinit():
+    disable()
 
 
 def stop():
@@ -27,7 +35,7 @@ def forward():
 
 
 def rotate_left_slightly():
-    # numbers here purely trial & error. 
+    # numbers here purely trial & error.
     # spin a specified number of degrees according to compass
     motors.spin_right(speed=SPEED_MAX * 0.5)
     utime.sleep_ms(round(MS_PER_SECOND * 0.25))
