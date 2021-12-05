@@ -1,11 +1,19 @@
 #!/usr/bin/env sh
 THISDIR=$(cd $(dirname "$0"); pwd) #this script's directory
-source "$THISDIR/.env"
-
 PARENTDIR=$(dirname $THISDIR)
 
-mpremote connect $MP_DEVICE fs mkdir /lib
-mpremote connect $MP_DEVICE fs rm /lib/tb6612fng.py
-mpremote connect $MP_DEVICE fs cp "$PARENTDIR/tb6612fng.py" ":/lib/tb6612fng.py"
+source "$THISDIR/.env"
 
-mpremote connect $MP_DEVICE  mount . exec "import spin_right"
+# copy dependencies:
+DRIVER_FILE=tb6612fng.py
+mpremote connect $MP_DEVICE fs mkdir /lib
+mpremote connect $MP_DEVICE fs rm "/lib/$DRIVER_FILE"
+mpremote connect $MP_DEVICE fs cp "$PARENTDIR/$DRIVER_FILE" ":/lib/$DRIVER_FILE"
+
+
+CMD=simple.py
+if [ "$#" -ge 1 ]; then
+  CMD=$1
+fi
+mpremote connect $MP_DEVICE  mount . run $CMD
+

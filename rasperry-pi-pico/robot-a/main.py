@@ -5,6 +5,7 @@ from constants import MS_PER_SECOND, US_PER_SECOND, MIN_OBSTACLE_DISTANCE
 import drive
 import display
 import distance_sensor
+import compass
 from logger import Logger, DEBUG, INFO, WARNING, ERROR
 
 log = None
@@ -79,24 +80,25 @@ def state_machine_loop():
     while True:
         for handler in state_machine_handlers:
             print(handler.__name__ + "...")
-            display.update(distance=distance_sensor.distance())
+            display.update(distance=distance_sensor.distance(),
+                           heading=compass.heading())
             new_state = handler(current_state)
             if new_state is not None and current_state != new_state:
                 # handler
                 log.info("sm loop: transitioning from {} to {} from handler {}".format(
                     current_state, new_state, handler.__name__))
                 current_state = new_state
-                display.update(current_state, distance=distance_sensor.distance())
+                display.update(
+                    current_state, distance=distance_sensor.distance())
                 break
             else:
                 continue
-        utime.sleep_us(int(US_PER_SECOND * 0.1))
+        utime.sleep_us(int(US_PER_SECOND * 0.05))
 
 
 def start_logger():
     global log
     log = Logger("robot-main", level=DEBUG)
-    log.open()
 
 
 def main():
@@ -104,11 +106,12 @@ def main():
         # wait a bit before we attempt to init devices and start moving:
         # LONG wait also allows to interrupt the bot if main.py acts up (like threads crashing sometimes bricks the pico)
         print("waiting before starting...")
-        utime.sleep_ms(int(MS_PER_SECOND * 3))
+        utime.sleep_ms(int(MS_PER_SECOND * 2))
         display.init()
         start_logger()
         distance_sensor.init()
         drive.init()
+        compass.init()
         state_machine_loop()
     except Exception as err:
         drive.disable()

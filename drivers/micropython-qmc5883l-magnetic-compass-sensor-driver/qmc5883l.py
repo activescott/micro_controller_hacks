@@ -1,4 +1,4 @@
-# MicroPython driver for QMC5883L (as I found often sold as a HMC5883L as described at https://surtrtech.com/2018/02/01/interfacing-hmc8553l-qmc5883-digital-compass-with-arduino/)
+# MicroPython driver for the QMC5883L 3-Axis Magnetic, Digital Compass IC from QST Corporation (often sold as a HMC5883L as described at https://surtrtech.com/2018/02/01/interfacing-hmc8553l-qmc5883-digital-compass-with-arduino/).
 import machine
 import utime
 import math
@@ -66,7 +66,7 @@ class Compass:
     OSR_128 = const(0b1000000000)
     OSR_064 = const(0b1100000000)
 
-    def __init__(self, sda_pin_id, scl_pin_id, i2c_id=0, i2c_bus_address=0x0D, declination=0):
+    def __init__(self, sda_pin_id, scl_pin_id, i2c_id=0, declination=0, i2c_bus_address=0x0D):
         """
         Initializes a new compass reader.
 
@@ -82,6 +82,24 @@ class Compass:
         self.i2c = machine.I2C(i2c_id, sda=sda, scl=scl, freq=I2C_RATE)
         self.i2c_bus_address = i2c_bus_address
         self.declination = declination
+        self.init(Compass.MODE_CONTINUOUS)
+
+    def init(self, mode, data_rate=OUTPUT_DATA_RATE_200HZ, field_range=RNG_2G, sample_ratio=OSR_512):
+        """
+        Initializes the device.
+        - `mode` must be one of: `Compass.MODE_CONTINUOUS` or `Compass.MODE_STANDBY`
+        - `data_rate` must be one of: `Compass.OUTPUT_DATA_RATE_10HZ`, Compass.OUTPUT_DATA_RATE_50HZ`, `Compass.OUTPUT_DATA_RATE_100HZ`, or `Compass.OUTPUT_DATA_RATE_200HZ`
+        - `field_range` must be one of `Compass.RNG_2G`, or `Compass.RNG_8G`.
+        - `sample_ratio` must be one of `Compass.OSR_512`, or `Compass.OSR_256`, `Compass.OSR_128`, or `Compass.OSR_064`.        
+        """
+        # SET/RESET Period is controlled by FBR [7:0], it is recommended that the register 0BH is written by 0x01.
+
+        self.i2c.writeto(self.i2c_bus_address, bytes(
+            [REGISTER_RESET_PERIOD, 0x01]))
+        # Write Register 09H by 0x1D (Define OSR = 512, Full Scale Range = 8 Gauss, ODR = 200Hz, set continuous measurement mode)
+        value = mode | data_rate | field_range | sample_ratio
+        self.i2c.writeto(self.i2c_bus_address,
+                         bytes([REGISTER_CONTROL, value]))
 
     def status(self):
         """
@@ -102,23 +120,6 @@ class Compass:
             "OVERFLOW": bits[0] & OVERFLOW == OVERFLOW,
             "DATA_SKIP": bits[0] & DATA_SKIP == DATA_SKIP
         }
-
-    def init(self, mode, data_rate=OUTPUT_DATA_RATE_200HZ, field_range=RNG_2G, sample_ratio=OSR_512):
-        """
-        Initializes the device.
-        - `mode` must be one of: `Compass.MODE_CONTINUOUS` or `Compass.MODE_STANDBY`
-        - `data_rate` must be one of: `Compass.OUTPUT_DATA_RATE_10HZ`, Compass.OUTPUT_DATA_RATE_50HZ`, `Compass.OUTPUT_DATA_RATE_100HZ`, or `Compass.OUTPUT_DATA_RATE_200HZ`
-        - `field_range` must be one of `Compass.RNG_2G`, or `Compass.RNG_8G`.
-        - `sample_ratio` must be one of `Compass.OSR_512`, or `Compass.OSR_256`, `Compass.OSR_128`, or `Compass.OSR_064`.        
-        """
-        # SET/RESET Period is controlled by FBR [7:0], it is recommended that the register 0BH is written by 0x01.
-
-        self.i2c.writeto(self.i2c_bus_address, bytes(
-            [REGISTER_RESET_PERIOD, 0x01]))
-        # Write Register 09H by 0x1D (Define OSR = 512, Full Scale Range = 8 Gauss, ODR = 200Hz, set continuous measurement mode)
-        value = mode | data_rate | field_range | sample_ratio
-        self.i2c.writeto(self.i2c_bus_address,
-                         bytes([REGISTER_CONTROL, value]))
 
     def read_smooth(self, samples=10):
         """Returns measurement data after smoothing it out"""

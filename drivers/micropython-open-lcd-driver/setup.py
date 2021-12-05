@@ -18,7 +18,7 @@ setup(
     maintainer_email='scott@willeke.com',
     license='MIT',
     classifiers = [
-        'Development Status :: 5 - Production/Stable',
+        'Development Status :: 4 - Beta',
         'Programming Language :: Python :: Implementation :: MicroPython',
         'License :: OSI Approved :: MIT License',
     ],

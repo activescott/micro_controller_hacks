@@ -38,6 +38,6 @@ def rotate_left_slightly():
     # numbers here purely trial & error.
     # spin a specified number of degrees according to compass
     motors.spin_right(speed=SPEED_MAX * 0.5)
-    utime.sleep_ms(round(MS_PER_SECOND * 0.25))
+    utime.sleep_ms(round(MS_PER_SECOND * 0.7))
     motors.stop_hard()
     utime.sleep_ms(int(MS_PER_SECOND * 0.1))

@@ -56,7 +56,7 @@ def _show(text: str, row: int) -> None:
 
 def show_all() -> None:
     _show(_activity, 0)
-    _show("dst:{} hd:{}".format(round(_distance), round(_heading)), 1)
+    _show("dst:{:>3} hd:{:>3}".format(round(_distance), round(_heading)), 1)
 
 
 def update_activity(activity: str) -> None:
@@ -91,13 +91,27 @@ if __name__ == "__main__":
     print("display.__main__ " * 20)
     import random
     init()
-    print("scan:" + str(lcd.scan()))
 
-    update("test 1", random.random() * 360, random.random() * 100)
-    utime.sleep(1)
+    def test_dislay():
+        print("scan:" + str(lcd.scan()))
+        update("test 1", random.random() * 360, random.random() * 100)
+        utime.sleep(1)
 
-    update("test 2", random.random() * 360, random.random() * 100)
-    utime.sleep(1)
+        update("test 2", random.random() * 360, random.random() * 100)
+        utime.sleep(1)
 
-    update("test 3", random.random() * 360, random.random() * 100)
-    utime.sleep(1)
+        update("test 3", random.random() * 360, random.random() * 100)
+        utime.sleep(1)
+    
+    def test_compass():
+        from qmc5883l import Compass
+        from constants import COMPASS_I2C_SDA_PIN, COMPASS_I2C_SCL_PIN, COMPASS_I2C_BUS
+
+        for cnt in range(10):
+            comp = Compass(COMPASS_I2C_SDA_PIN, COMPASS_I2C_SCL_PIN, COMPASS_I2C_BUS)
+            reading = comp.read_smooth()
+            update("test {}".format(cnt), reading["heading"], random.random() * 100)
+            utime.sleep(1)
+
+    
+    test_compass()

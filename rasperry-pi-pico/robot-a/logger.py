@@ -1,4 +1,6 @@
-import utime, sys, io
+import utime
+import sys
+import io
 
 
 ERROR = 40
@@ -8,18 +10,26 @@ DEBUG = 10
 
 
 class Logger:
-    def __init__(self, name, level=INFO):
+    def __init__(self, name=None, level=INFO):
+        """
+        Inititalizes a new logger. if `name` is `None` then it will print to stdout.
+        """
         self.name = name
         self.file = None
         self.level = level
+        self.open()
 
     def open(self):
         if self.file is None:
-            self.file = open("{}.log".format(self.name), "at")
+            if self.name is None:
+                self.file = sys.stdout
+            else:
+                self.file = open("{}.log".format(self.name), "at")
 
     def close(self):
         if self.file:
-            self.file.close()
+            if self.name is not None:
+                self.file.close()
             self.file = None
 
     def __enter__(self):
@@ -33,7 +43,8 @@ class Logger:
         prefix = "{:02d}:{:02d}.{:02d} ".format(*tt)
         print(prefix + msg)
         self.file.write(prefix + msg + "\n")
-        self.file.flush()
+        if hasattr(self.file, "flush"):
+            self.file.flush()
 
     def error(self, msg, exception=None):
         if (exception is not None):

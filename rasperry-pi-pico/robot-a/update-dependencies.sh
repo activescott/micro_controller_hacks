@@ -30,6 +30,7 @@ echo "\nCopying packages to local /lib dir:"
 cp -v ../../drivers/micropython-motor-driver-dual-tb6612fng/tb6612fng.py "$LIBDIR/"
 cp -v ../../drivers/micropython-hcsr04/hcsr04.py "$LIBDIR/"
 cp -v ../../drivers/micropython-open-lcd-driver/open_lcd.py "$LIBDIR/"
+cp -v ../../drivers/micropython-qmc5883l-magnetic-compass-sensor-driver/qmc5883l.py "$LIBDIR/"
 
 echo ""
 echo "listing libs:"

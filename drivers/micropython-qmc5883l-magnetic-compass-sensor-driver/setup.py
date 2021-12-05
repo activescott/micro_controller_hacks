@@ -5,12 +5,12 @@ sys.path.pop(0)
 from setuptools import setup
 
 setup(
-    name='micropython-motor-driver-dual-tb6612fng',
-    py_modules=['tb6612fng'],
+    name='micropython-qmc5883l-magnetic-compass-sensor-driver',
+    py_modules=['qmc5883l.py'],
     version='1.0.0',
-    description='MicroPython library for Motor Driver TB6612FNG boards.',
-    long_description='Lets you control either or both DC motors via SparkFun Motor Driver Dual TB6612FNG boards.',
-    keywords='tb6612fng motor micropython',
+    description='MicroPython driver for the QMC5883L 3-Axis Magnetic, Digital Compass IC from QST Corporation.',
+    long_description='MicroPython driver for the QMC5883L 3-Axis Magnetic, Digital Compass IC from QST Corporation (often sold as a HMC5883L as described at https://surtrtech.com/2018/02/01/interfacing-hmc8553l-qmc5883-digital-compass-with-arduino/).',
+    keywords='compass magnometer micropython',
     url='https://github.com/activescott/micro_controller_hacks',
     author='Scott Willeke',
     author_email='scott@willeke.com',
