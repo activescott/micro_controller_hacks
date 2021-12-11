@@ -1,0 +1,16 @@
+# Wheel Encoder (Hall Effect Sensor)
+WHEEL_ENCODER_PIN_LEFT = 4
+
+# Motor Driver Pins:
+MOTOR_STBY_PIN = 12
+MOTOR_A_PIN1 = 14
+MOTOR_A_PIN2 = 15
+MOTOR_A_PWM = 13
+
+MOTOR_B_PIN1 = 16
+MOTOR_B_PIN2 = 17
+MOTOR_B_PWM = 18
+
+# Misc
+MS_PER_SECOND = 1000
+US_PER_SECOND = 10**6

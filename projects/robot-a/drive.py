@@ -31,7 +31,7 @@ def stop():
 
 def forward():
     speed = SPEED_MAX / 2
-    motors.forward()
+    motors.forward(speed)
 
 
 def rotate_left_slightly():
