@@ -1,5 +1,5 @@
 # Wheel Encoder (Hall Effect Sensor)
-WHEEL_ENCODER_PIN_LEFT = 4
+WHEEL_ENCODER_PIN_RIGHT = 4
 
 # Motor Driver Pins:
 MOTOR_STBY_PIN = 12

@@ -1,24 +1,16 @@
-import uasyncio
-from constants import WHEEL_ENCODER_PIN_LEFT
-from constants import MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM, MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM, MOTOR_STBY_PIN
-from encoder import Encoder
-from tb6612fng import Motor, Motors, SPEED_MAX
+# micropython-wheel-encoder-hall-effect-sensor
 
+MicroPython driver for [SparkFun's Wheel Encoder Kit's hall effect sensor](https://www.sparkfun.com/products/12629).
 
-def init_motors():
-    global motors
-    print("initializing left/right")
-    left = Motor(MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM)
-    right = Motor(MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM)
-    print("initializing motors")
-    return Motors(left, right, MOTOR_STBY_PIN)
-
-
+## Usage
+NOTE That this library uses an asyncio coroutine to read the sensor so your main app must use `uasyncio.run(main())` and yield to uasyncio periodically like `await uasyncio.sleep_ms(5)` (note the await!)
+See the examples folder for a complete example.
+```py
 async def main():
     # setup
     motors = init_motors()
     print("setting up encoder")
-    with Encoder(WHEEL_ENCODER_PIN_LEFT) as encoder:
+    with Encoder(WHEEL_ENCODER_PIN_RIGHT) as encoder:
         # start moving
         speed = SPEED_MAX / 4.0
         motors.forward(speed)
@@ -41,3 +33,5 @@ async def main():
         print(encoder)
 
 uasyncio.run(main())
+
+```

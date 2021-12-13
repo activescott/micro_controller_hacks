@@ -1,23 +1,14 @@
 # my "hello world" of motors
-from tb6612fng import Motors, Motor, SPEED_MAX
 import utime
-
-motor_a_pin1 = 14
-motor_a_pin2 = 15
-motor_a_pwm  = 13
-
-motor_b_pin1 = 16
-motor_b_pin2 = 17
-motor_b_pwm  = 18
-
-stby_pin = 10
+from tb6612fng import Motors, Motor, SPEED_MAX
+from constants import MOTOR_STBY_PIN, MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM, MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM
 
 print("initializing left/right")
-left = Motor(motor_a_pin1, motor_a_pin2, motor_a_pwm)
-right = Motor(motor_b_pin1, motor_b_pin2, motor_b_pwm)
+left = Motor(MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM)
+right = Motor(MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM)
 
 print("initializing motors")
-motors = Motors(left, right, stby_pin)
+motors = Motors(left, right, MOTOR_STBY_PIN)
 
 try:
     print("spin right")

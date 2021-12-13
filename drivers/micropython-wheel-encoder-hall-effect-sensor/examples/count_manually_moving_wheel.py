@@ -1,10 +1,10 @@
 import uasyncio
-from constants import WHEEL_ENCODER_PIN_LEFT
+from constants import WHEEL_ENCODER_PIN_RIGHT
 from encoder import Encoder
 
 async def main():
     # setup
-    encoder = Encoder(WHEEL_ENCODER_PIN_LEFT)
+    encoder = Encoder(WHEEL_ENCODER_PIN_RIGHT)
 
     # main: just manually move the wheel/motor and see how much it detects
     for seconds in range(5, 0, -1):
