@@ -1,3 +1,4 @@
 [submodule "drivers/micropython-hcsr04"]
 	path = drivers/micropython-hcsr04
 	url = git@github.com:activescott/micropython-hcsr04.git
+	branch = fix/timeout-handling
