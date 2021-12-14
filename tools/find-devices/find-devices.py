@@ -18,10 +18,11 @@ if __name__ == '__main__':
     for p in filtered:
         print("  " + p.device)
     print("Listing MicroPython devices complete. {} devices found".format(len(filtered)))
-    print("There was only one device found. Do you want to write it to `../../.env` (Y/n) ?")
+    dest = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../.env"))
+    print("There was only one device found. Do you want to write it to `{}` (Y/n) ?".format(dest))
     for line in sys.stdin:
         if line is not None and isinstance(line, str) and line.lower().startswith("y"):
             device = filtered[0].device
-            with open("../../.env", mode="w") as f:
+            with open(dest, mode="w") as f:
                 print("MP_DEVICE={}".format(device), file=f)
         break
