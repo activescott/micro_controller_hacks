@@ -23,10 +23,10 @@ COMPASS_I2C_SDA_PIN = 0
 COMPASS_I2C_SCL_PIN = 1
 COMPASS_I2C_BUS = 0
 
+# Wheel Encoder (Hall Effect Sensor)
+WHEEL_ENCODER_PIN_RIGHT = 4
+WHEEL_ENCODER_PIN_LEFT = 5
 
 # Misc
 MS_PER_SECOND = 1000
 US_PER_SECOND = 10**6
-
-# Minimum allowed distance from an obstacle
-MIN_OBSTACLE_DISTANCE = 40.0

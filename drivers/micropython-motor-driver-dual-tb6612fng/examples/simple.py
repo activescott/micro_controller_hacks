@@ -1,6 +1,6 @@
 # my "hello world" of motors
 import utime
-from tb6612fng import Motors, Motor
+from tb6612fng import Motors, Motor, SPEED_MAX
 from constants import MOTOR_STBY_PIN, MOTOR_A_PIN1, MOTOR_A_PIN2, MOTOR_A_PWM, MOTOR_B_PIN1, MOTOR_B_PIN2, MOTOR_B_PWM
 
 print("initializing left/right")
@@ -11,8 +11,9 @@ print("initializing motors")
 motors = Motors(left, right, MOTOR_STBY_PIN)
 
 try:
-    print("forward...")
-    motors.forward()
+    speed = SPEED_MAX / 4
+    print("forward @ {}...".format(speed))
+    motors.forward(speed)
 
     utime.sleep(2)
 
