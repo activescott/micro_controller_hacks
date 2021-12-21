@@ -35,7 +35,7 @@ class Logger:
     def __enter__(self):
         self.open()
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_value, traceback):
         self.close()
 
     def log(self, msg):

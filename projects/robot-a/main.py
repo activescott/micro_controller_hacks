@@ -14,6 +14,7 @@ log = None
 STATE_STARTING = "STATE_STARTING"
 STATE_FORWARD = "STATE_FORWARD"
 STATE_OBSTACLE_DETECTED = "STATE_OBSTACLE_DETECTED"
+STATE_WHEEL_IS_STUCK = "STATE_WHEEL_IS_STUCK"
 
 
 async def state_machine_handler(state: str) -> None | str:
@@ -46,7 +47,7 @@ async def handle_avoid_obstacle(state: str) -> None | str:
     if state != STATE_OBSTACLE_DETECTED:
         return None
     drive.stop()
-    drive.rotate_left_slightly()
+    drive.spin_slightly(drive.DIRECTION_LEFT)
 
 
 async def handle_forward(state: str) -> None | str:
@@ -62,7 +63,7 @@ async def handle_starting(state: str) -> None | str:
     return STATE_FORWARD
 
 
-async def handle_wheel_stuck(state: str) -> None | str:
+async def handle_detect_wheel_stuck(state: str) -> None | str:
     if state == STATE_FORWARD:
         # we think we're moving so make sure that both wheels are too:
         left = drive.left_speed()
@@ -71,11 +72,28 @@ async def handle_wheel_stuck(state: str) -> None | str:
             "handle_wheel_stuck: wheels left speed:{}, right speed:{}".format(left, right))
 
         if drive.left_stopped() or drive.right_stopped():
-            log.warn(
-                "handle_wheel_stuck: wheel STUCK (left speed:{}, right speed:{}). Backing up...".format(left, right))
-            drive.reverse()
-            await uasyncio.sleep_ms(250)
-            drive.stop()
+            forward_duration = drive.forward_duration_ms()
+            if forward_duration > MS_PER_SECOND * 0.5:
+                log.warn(
+                    "handle_wheel_stuck: wheel STUCK (left speed:{}, right speed:{}, forward duration: {}). Backing up...".format(left, right, forward_duration))
+                return STATE_WHEEL_IS_STUCK
+            else:
+                log.info(
+                    "handle_wheel_stuck: wheels /might/ be stuck but not for long yet (left speed:{}, right speed:{}, forward duration: {}). Backing up...".format(left, right, forward_duration))
+                return None
+
+
+async def handle_unstick_wheel_stuck(state: str) -> None | str:
+    if state == STATE_WHEEL_IS_STUCK:
+        # backup, turn a direction a bit and stop
+        drive.reverse()
+        # TODO: Backup a recorded *distance* rather than for a given time: sometimes surface impacts distance traveled during a given time. For example when on a rug he'll go only a fraction of the distance that he'll go on a hard surface. 
+        await uasyncio.sleep_ms(250)
+        drive.stop()
+        await uasyncio.sleep_ms(250)
+        drive.spin_slightly(drive.DIRECTION_RANDOM)
+        await uasyncio.sleep_ms(100)
+        return STATE_FORWARD
 
 
 async def handle_update_display(state: str) -> None | str:
@@ -89,7 +107,8 @@ state_machine_handlers = [
     handle_detect_obstacle,
     handle_avoid_obstacle,
     handle_forward,
-    handle_wheel_stuck,
+    handle_detect_wheel_stuck,
+    handle_unstick_wheel_stuck,
     handle_update_display
 ]
 
@@ -113,12 +132,12 @@ async def state_machine_loop():
                 break
             else:
                 continue
-        await uasyncio.sleep_ms(int(MS_PER_SECOND * 0.05))
+        await uasyncio.sleep_ms(int(MS_PER_SECOND * 0.5))
 
 
 def start_logger():
     global log
-    log = Logger("robot-main", level=DEBUG)
+    log = Logger("robot-main", level=INFO)
 
 
 async def main():

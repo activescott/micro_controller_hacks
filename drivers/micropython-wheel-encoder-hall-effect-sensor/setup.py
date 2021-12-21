@@ -6,7 +6,7 @@ from setuptools import setup
 
 setup(
     name='micropython-wheel-encoder-hall-effect-sensor',
-    py_modules=['encoder.py', 'funcs.py'],
+    py_modules=['encoder.py'],
     version='1.0.0',
     description='MicroPython driver for SparkFun\'s Wheel Encoder Kit\'s hall effect sensor.',
     long_description='MicroPython driver for [SparkFun\'s Wheel Encoder Kit\'s hall effect sensor](https://www.sparkfun.com/products/12629).',

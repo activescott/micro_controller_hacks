@@ -1,7 +1,7 @@
 import uasyncio
 from array import array
 from machine import Pin
-from funcs import debounce1 as debounce
+from micropython import const
 from utime import ticks_diff, ticks_ms
 
 _MS_PER_SECOND = const(1000)
@@ -29,19 +29,11 @@ class Encoder:
         self._last_hit_time = -1
         self._last_hit_duration = -1
         # get started:
-        self.run()
-
-    def run(self):
-        # NOTE: this only works if the main app uses uasyncio.run(...) and yield to uasyncio like `await uasyncio.sleep_ms(5)` (note the await!)
-        if self._reader_task is None:
-            self._reader_task = uasyncio.create_task(self._reader())
-        return self._reader_task
+        self.pin_val_last = -1
+        self._reader_irq_handler_setup()
 
     def cancel(self):
-        if self._reader_task is not None:
-            # TODO: needs a try/except?
-            self._reader_task.cancel()
-            self._reader_task = None
+        pass
 
     def __enter__(self):
         return self
@@ -49,26 +41,22 @@ class Encoder:
     def __exit__(self, exc_type, exc_value, traceback):
         self.cancel()
 
-    async def _reader(self):
-        # Here we read the pin in a loop. Couple weird things happen:
+    def _reader_irq_handler_setup(self):
+        self.pin.irq(handler=self._reader_irq_handler,
+                     trigger=Pin.IRQ_FALLING | Pin.IRQ_RISING, hard=True)
+
+    def _hit(self, pin_val):
+        if pin_val == _MAGNET_DETECTED and pin_val != self.pin_val_last:
+            self._speed_track_hit()
+            self._hits += 1
+        self.pin_val_last = pin_val
+
+    def _reader_irq_handler(self, pin_instance):
+        # Here we read the pin very frequently as called by an IRQ. Couple weird things happen:
         # 1. We'll read hits with the same value rapidly
-        # 2. We also only want to record a hit if MAGNET_DETECTED is directly preceded by a NOT DETECTED. Otherwise when the wheel is stopped with the magent directly on top of the sensor we will think the wheel is still moving.
-        # To mitigate #1 we use a debounce
-        # To mitigate #2, we ensure MAGNET_DETECTED is only recorded if it was preceded by not detected.
-        pin_val_last = -1
-
-        def _hit(pin_val):
-            nonlocal pin_val_last
-            if pin_val == _MAGNET_DETECTED and pin_val != pin_val_last:
-                self._speed_track_hit()
-                self._hits += 1
-            pin_val_last = pin_val
-
-        debounced_hit = debounce(_hit, time_window_ms=1000)
-        while True:
-            pin_val = self.pin.value()
-            debounced_hit(pin_val)
-            await uasyncio.sleep_ms(5)
+        # 2. We also only want to record a hit if MAGNET_DETECTED is directly preceded by a NOT DETECTED. Otherwise when the wheel is stopped with the magnet directly on top of the sensor we will think the wheel is still moving.
+        # To mitigate both we ensure MAGNET_DETECTED is only recorded if it was preceded by not detected. A "not detected" event is only recorded to know if it directly preceded a detected event.
+        self._hit(pin_instance.value())
 
     def _speed_track_hit(self):
         now = ticks_ms()
@@ -95,7 +83,7 @@ class Encoder:
                 self._last_hit_time = -1
                 return 0
             else:
-                # if we've slowed, it's /at least/ this long to do a rotation:
+                # we've slowed; assume a rotation duration takes this long (but it could take longer in practice)
                 one_rotation_duration = since * self.hits_per_rotation
         _ONE_MINUTE = const(_MS_PER_SECOND * 60)
         return _ONE_MINUTE / one_rotation_duration

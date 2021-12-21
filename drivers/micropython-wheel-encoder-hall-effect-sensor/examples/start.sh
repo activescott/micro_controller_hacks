@@ -7,7 +7,7 @@ source "$THISDIR/.env"
 # copy dependencies:
 echo "\nCopying packages to local /lib dir:"
 mpremote connect $MP_DEVICE fs mkdir /lib
-for DRIVER_FILE in encoder.py funcs.py
+for DRIVER_FILE in encoder.py
 do
   mpremote connect $MP_DEVICE fs rm "/lib/$DRIVER_FILE"
   mpremote connect $MP_DEVICE fs cp "$PARENTDIR/$DRIVER_FILE" ":/lib/$DRIVER_FILE"
