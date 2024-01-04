@@ -1,0 +1,9 @@
+- [ ] demonstrate writing to sd card
+- [ ] set up logging to sd card
+- [ ] confirm GPS
+- [ ] setup GPS to constantly dump a GPX file (can we add extended info to that? - yes there are extensions)
+  - GPX references:
+    - https://wiki.openstreetmap.org/wiki/GPX
+    - https://www.topografix.com/gpx.asp
+    - https://en.wikipedia.org/wiki/GPS_Exchange_Format
+- [ ] Add LEDs to show if GPS status like "Operating with Fix", "Operating without Fix", "Invalid or No data"

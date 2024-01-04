@@ -1,0 +1,8 @@
+# put stuff here with no need to keep
+/junk/
+
+# debug files
+/debug*.txt
+
+# firmware binary files don't need to be in git, but I put firmware in this folder for docs and scripts
+/vendor/micropython-firmware/*.bin
